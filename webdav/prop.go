@@ -131,7 +131,7 @@ var liveProps = map[xml.Name]struct {
 		dir: true,
 	},
 	{Space: "DAV:", Local: "creationdate"}: {
-		findFn: nil,
+		findFn: findCreationDate,
 		dir:    false,
 	},
 	{Space: "DAV:", Local: "getcontentlanguage"}: {
@@ -376,6 +376,10 @@ func findContentLength(ctx context.Context, fs FileSystem, ls LockSystem, name s
 }
 
 func findLastModified(ctx context.Context, fs FileSystem, ls LockSystem, name string, fi os.FileInfo) (string, error) {
+	return fi.ModTime().UTC().Format(http.TimeFormat), nil
+}
+
+func findCreationDate(ctx context.Context, fs FileSystem, ls LockSystem, name string, fi os.FileInfo) (string, error) {
 	return fi.ModTime().UTC().Format(http.TimeFormat), nil
 }
 
